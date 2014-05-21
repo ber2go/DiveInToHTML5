@@ -1,0 +1,81 @@
+<!doctype html>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link href="bower_components/bootstrap/dist/css/bootstrap.css" rel="stylesheet" media="screen">
+    <script type="text/javascript" src="bower_components/jquery/dist/jquery.js"></script>
+    <script type="text/javascript" src="bower_components/bootstrap/dist/js/bootstrap.js"></script>
+    <title>HTML5 Input Types</title>
+</head>
+
+<body>
+    <main></main>
+
+    <article>
+        <h1>HTML5 Input Types</h1>
+    </article>
+    <form role="form">
+        <div class="form-group">
+            <h1>Color</h1>
+            <input type="color" />
+        </div>
+        <div>
+            <h1>Datalist</h1>
+            <label for="colors-box">Colors:</label>
+            <br/>
+            <input id="colors-box" list="colors" autofocus/>
+            <datalist id="colors">
+                <option value="Blue" />
+                <option value="Red" />
+                <option value="Yellow" />
+                <option value="Orange" />
+                <option value="White" />
+            </datalist>
+        </div>
+        <div>
+            <h1>Date & Time</h1>
+            <input type="date" />
+            <br/>
+            <input type="datetime" />
+            <br/>
+            <input type="datetime-local" />
+            <br/>
+            <input type="month" />
+            <br/>
+            <input type="week" />
+        </div>
+        <div>
+            <h1>Email, URL & Template</h1>
+            <input type="email" />
+            <br/>
+            <input type="url" />
+            <br/>
+            <input type="tel" />
+        </div>
+        <div>
+            <h1>Range</h1>
+            <input id="inputRange" type="range" />
+            <span id="valueRange">10</span>
+        </div>
+        <div>
+            <h1>Number</h1>
+            <input type="number" />
+        </div>
+        <div>
+            <h1>Search</h1>
+            <input type="search" />
+        </div>
+    </form>
+    <script>
+    $(document).ready(function() {
+        $('#inputRange').on('change', function() {
+            $('#valueRange').html(this.value);
+        });
+    });
+    </script>
+</body>
+
+</html>

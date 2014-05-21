@@ -1,0 +1,124 @@
+<!doctype html>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link href="bower_components/bootstrap/dist/css/bootstrap.css" rel="stylesheet" media="screen">
+    <script type="text/javascript" src="bower_components/jquery/dist/jquery.js"></script>
+    <script type="text/javascript" src="bower_components/bootstrap/dist/js/bootstrap.js"></script>
+    <title>Forms - validation via pseudo classes</title>
+    <style>
+    .panel {
+        padding:10px;
+        margin-top:20px;
+    }
+    input:valid + .invalid
+    /* Adjacent sibling selector */
+    {
+        visibility: hidden;
+    }
+    input:invalid + .invalid {
+        visibility: visible;
+    }
+    input:required {
+        border: 2px solid #900;
+    }
+    input:valid {
+        border: 2px solid #ccc;
+    }
+    .validation-messages span {
+        margin-top: 0px;
+        margin-bottom: 4px;
+        font-size: 0.8em;
+        color: #666;
+    }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <div class="panel panel-default">
+            <form id="change-email-form" name="change-email-form" class="form" role="form">
+                <fieldset>
+                    <div class="form-group">
+                        <input id="user" class="form-control" type="text" placeholder="Username" pattern="[a-zA-Z]{5,}" required/>
+                        <div class="validation-messages">
+                            <span data-rule="valueMissing" class="hide">The username is required.</span>
+                            <span data-rule="patternMismatch" class="hide">Must be a series of alpha characters only (min 5, max 30).</span>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <input type="email" class="form-control" id="email" name="email" placeholder="Email" required />
+                        <div class="validation-messages">
+                            <span data-rule="valueMissing" class="hide">The email is required.</span>
+                            <span data-rule="typeMismatch" class="hide">Special characters are not allowed.</span>
+                        </div>
+                    </div>
+                    <button type="submit" id="submit" name="submit" class="btn">Change</button>
+                    <button type="submit" id="checkValidation" name="submit" class="btn">Validate</button>
+                </fieldset>
+            </form>
+        </div>
+    </div>
+
+    <script>
+    (function($) {
+        // Array for the validation rule names.
+        var ruleNames = [];
+
+        // Fills array with rule names.
+        // Looks for all the elements with 'vmsg' class
+        // and then adds the first class (rule name) to the array
+        $('[data-rule]').each(function(i, element) {
+
+            // Clear UI of all validation messages.
+            var ruleName = element.getAttribute('data-rule');
+
+            if ($.inArray(ruleName, ruleNames) < 0) {
+                ruleNames.push(ruleName);
+            }
+        });
+
+        var validate = function() {
+            $('.validation-messages span').addClass('hide');
+            document.getElementById('change-email-form').checkValidity();
+        },
+
+            validationFail = function(e) {
+                var element = e.srcElement;
+                var validity = element.validity;
+
+                if (!validity.valid) {
+                    ruleNames.forEach(function(ruleName) {
+                        checkRule(validity, ruleName, element);
+                    });
+                    e.preventDefault();
+                }
+            },
+
+            // Check if the validation rule returns 'true'
+            // then display the appropriate validation message.
+            checkRule = function(state, ruleName, ele) {
+
+                if (state[ruleName]) {
+                    $(ele).next().find('[data-rule="' + ruleName + '"]').removeClass('hide');
+                }
+            };
+
+        // Attach validation event handler to all input
+        // elements that are not buttons.
+        $(':input:not(:button)').each(function() {
+            this.oninvalid = validationFail;
+            this.onblur = validate;
+        });
+
+        // Binds the click event to the validate button
+        $('#checkValidation').click(validate);
+
+    })(jQuery);
+    </script>
+</body>
+
+</html>
